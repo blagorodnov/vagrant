@@ -1,0 +1,11 @@
+---
+- name: Install WEB Services && Wordpress
+  hosts: webtest
+  remote_user: root
+  sudo: yes
+
+  roles:
+    - mysql
+    - nginx
+    - php-fpm
+    - wordpress

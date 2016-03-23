@@ -1,0 +1,24 @@
+---
+- name: Install REMI repo
+  yum: name={{ remi_repository }} state=present
+- name: Install php-fpm and deps 
+  yum: name={{ item }} enablerepo=remi-php56 state=present
+  with_items:
+    - php
+    - php-fpm
+    - php-enchant
+    - php-mbstring
+    - php-mysql
+    - php-IDNA_Convert
+    - php-PHPMailer
+    - php-process
+    - php-simplepie
+    - php-xml
+
+- name: Disable default pool
+  command: mv /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.disabled creates=/etc/php-fpm.d/www.disabled
+  notify: restart php-fpm
+ 
+- name: Copy php-fpm configuration
+  template: src=php-fpm.conf dest=/etc/php-fpm.d/
+  notify: restart php-fpm
